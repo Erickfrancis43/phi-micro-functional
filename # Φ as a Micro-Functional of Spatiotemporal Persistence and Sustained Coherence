@@ -1,0 +1,9 @@
+# phi-micro-functional
+A scale-invariant micro-functional for spatiotemporal organizational persistence, tested across physical.
+This repository contains the reference implementation and formal definitions 
+associated with the preprint:
+
+"Φ as a Micro-Functional of Spatiotemporal Persistence and Sustained Coherence"
+
+The Φ functional is proposed as a scale-invariant measure of spatiotemporal
+organizational persistence, distinct from energy, force, or entropy.
