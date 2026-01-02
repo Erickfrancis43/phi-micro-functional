@@ -1,0 +1,162 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+class CampoPhi_Refinado:
+"""
+Modelo Φ refinado – versão arquivável.
+
+Φ mede Persistência Organizacional Espaço-Temporal.
+Não é energia, não é força, não é entropia.
+
+Φ = f(persistência temporal, densidade espacial, acoplamento efetivo, coerência sustentada)
+"""
+
+======================================================================
+
+1. CONSTANTES FUNDAMENTAIS
+
+======================================================================
+
+def init(self):
+self.hbar = 1.054571817e-34       # J·s
+self.c = 299792458               # m/s
+self.kb = 1.380649e-23           # J/K
+
+# Escalas energéticas (J)    
+self.E_higgs_vev = 246e9 * 1.602e-10    
+self.E_higgs_boson = 125e9 * 1.602e-10    
+self.E_atom = 13.6 * 1.602e-19    
+self.E_bio = 0.5 * 1.602e-19    
+    
+# Escalas temporais (s)    
+self.T_universe = 4.35e17    
+self.T_higgs = 1.56e-22    
+self.T_bio = 1e-3    
+self.T_inert = 1e15
+
+======================================================================
+
+2. ACOPLAMENTO EFETIVO χ (massa / Higgs)
+
+======================================================================
+
+def chi_effective(self, energia, regime):
+"""
+χ representa quanto do mecanismo de Higgs
+se manifesta como inércia organizada.
+
+χ ∈ [0,1] — parâmetro efetivo, não fundamental.    
+"""    
+if regime == 'VACUUM':    
+    return 1.0    
+    
+if regime == 'HIGGS_PARTICLE':    
+    return 0.95    
+    
+# Saturação física: não existe acoplamento > 1    
+x = energia / self.E_higgs_vev    
+return np.tanh(x * 1e18)
+
+======================================================================
+
+3. COERÊNCIA SUSTENTADA Γ
+
+======================================================================
+
+def gamma_coherence(self, regime):
+"""
+Γ mede coerência funcional sustentada contra ruído.
+Não é coerência quântica pura.
+"""
+if regime == 'VACUUM':
+return 1.0
+
+if regime == 'HIGGS_PARTICLE':    
+    return 1e-4  # decoerência quase instantânea    
+    
+if regime == 'BIO_ACTIVE':    
+    return 0.85  # coerência dissipativa    
+    
+return 0.0  # matéria inerte macroscópica
+
+======================================================================
+
+4. Φ BASE – PERSISTÊNCIA ESPAÇO-TEMPORAL
+
+======================================================================
+
+def phi_base(self, tempo_observado, escala_espacial):
+"""
+Norma logarítmica da persistência informacional
+no espaço e no tempo.
+"""
+log_t = np.log10(1 + tempo_observado)
+volume = max(escala_espacial**3, 1e-90)
+log_rho = np.log10(1 + 1/volume)
+
+return np.sqrt(log_t**2 + log_rho**2)
+
+======================================================================
+
+5. Φ FINAL
+
+======================================================================
+
+def calcular_phi(self, nome, tempo, escala, regime):
+
+if regime == 'VACUUM':    
+    energia = self.E_higgs_vev    
+elif regime == 'HIGGS_PARTICLE':    
+    energia = self.E_higgs_boson    
+elif regime == 'BIO_ACTIVE':    
+    energia = self.E_bio    
+else:    
+    energia = self.E_atom    
+    
+chi = self.chi_effective(energia, regime)    
+gamma = self.gamma_coherence(regime)    
+phi0 = self.phi_base(tempo, escala)    
+    
+phi_final = phi0 * (1 + chi + gamma)    
+    
+if chi > gamma * 1.5:    
+    dom = "Massa"    
+elif gamma > chi * 1.5:    
+    dom = "Informação"    
+else:    
+    dom = "Misto"    
+    
+return {    
+    "Sistema": nome,    
+    "χ": round(chi, 4),    
+    "Γ": round(gamma, 4),    
+    "Φ_base": round(phi0, 2),    
+    "Φ_final": round(phi_final, 2),    
+    "Dominância": dom    
+}
+
+======================================================================
+
+6. EXECUÇÃO DE REFERÊNCIA
+
+
+
+======================================================================
+
+modelo = CampoPhi_Refinado()
+
+amostras = [
+("Vácuo de Higgs", 4.35e17, 1e-18, 'VACUUM'),
+("Bóson de Higgs", 1.56e-22, 1e-18, 'HIGGS_PARTICLE'),
+("Célula Viva", 3600, 1e-6, 'BIO_ACTIVE'),
+("Matéria Inerte", 1e15, 1e-3, 'INERT')
+]
+
+df = pd.DataFrame([modelo.calcular_phi(*a) for a in amostras])
+print(df.to_string(index=False))
+
+
+results
+
+Sistema      χ      Γ  Φ_base  Φ_final Dominância Vácuo de Higgs 1.0000 1.0000   56.81   170.42      Misto Bóson de Higgs 0.9500 0.0001   54.00   105.31      Massa    Célula Viva 0.0020 0.8500   18.35    33.98 Informação Matéria Inerte 0.0552 0.0000   17.49    18.46      Massa
