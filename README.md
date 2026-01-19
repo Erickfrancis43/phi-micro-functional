@@ -1,3 +1,13 @@
+
+## ⚠️ Important Notice — Microphysics Revision
+
+The microphysical formulation of the Φ-field is currently undergoing a **major revision**.
+
+- The previous version (v1) has been formally deprecated.
+- A new canonical formulation (v2) is in preparation.
+
+Until v2 is released, results based on the microphysical Φ-field should be considered **non-final**.
+
 # Φ as a Micro-Functional of Spatiotemporal Persistence and Sustained Coherence
 
 This repository contains the reference implementation and formal definitions
